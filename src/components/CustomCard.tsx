@@ -1,15 +1,41 @@
+import { useState } from "react";
 import type { CardElement } from "../types";
 import { Button } from "./ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 
 function CustomCard({ cardProperties }: { cardProperties: CardElement }) {
+  const [counter, setCounter] = useState(0);
+
+  function handleButtonClick() {
+    setCounter((currentCounter) => currentCounter + 1);
+    setCounter((currentCounter) => currentCounter + 1);
+    setCounter((currentCounter) => currentCounter + 1);
+  }
+
   return (
-    <div className="bg-black text-white p-2 rounded-2xl flex flex-col items-center">
-      <h1 className="text-cyan-500 text-center text-2xl">
-        {cardProperties.title}
-      </h1>
-      <p className="text-center">{cardProperties.description}</p>
-      <Button variant="secondary">Schedule a Call</Button>
-    </div>
+    <Card className="w-full bg-black text-white">
+      <CardHeader>
+        <CardTitle>{cardProperties.title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <CardDescription className="text-white">
+          {cardProperties.description}
+        </CardDescription>
+      </CardContent>
+      <CardFooter>
+        <Button onClick={handleButtonClick} variant="secondary">
+          Schedule a Call
+        </Button>
+        <span className="ml-2">{counter}</span>
+      </CardFooter>
+    </Card>
   );
 }
 
