@@ -1,0 +1,22 @@
+body{
+    margin: 0;
+}
+
+.cardGroup{
+     display: grid;
+     grid-template-columns: 1fr; 
+     gap: 2rem;
+}
+
+
+@media (min-width: 900px) {
+    .cardGroup{
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (min-width: 1200px) {
+    .cardGroup{
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
