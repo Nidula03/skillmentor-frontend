@@ -1,4 +1,4 @@
-import type { User, Course } from "@/types";
+import type { User, Course } from "../types";
 import { MOCK_USER, MOCK_ENROLLED_COURSES } from "./mockData";
 
 export class StorageService {

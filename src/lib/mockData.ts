@@ -9,7 +9,7 @@ import AWSCertified2Img from "@/assets/aws-certified-2.webp";
 import AWSCertified3Img from "@/assets/aws-certified-3.webp";
 import MicrosoftCertified1Img from "@/assets/microsoft-certified-1.webp";
 import MicrosoftCertified2Img from "@/assets/microsoft-certified-2.webp";
-import type { Course, Mentor, User } from "@/types";
+import type { Course, Mentor, User } from "../types";
 
 export const MOCK_MENTORS: Mentor[] = [
   {

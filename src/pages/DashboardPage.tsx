@@ -1,31 +1,74 @@
 import { useEffect, useState, useCallback } from "react";
-import { useNavigate } from "react-router";
-import { useAuth } from "@/lib/auth-context";
+import { useAuth, useUser } from "@clerk/clerk-react";
 import { CalendarDays } from "lucide-react";
 import { StatusPill } from "@/components/StatusPill";
 import { storage } from "@/lib/storage";
 import type { Course } from "@/types";
+import { useNavigate } from "react-router";
 
 export default function DashboardPage() {
-  const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isLoaded, isSignedIn } = useAuth();
   const [courses, setCourses] = useState<Course[]>([]);
+  const router = useNavigate();
+  const { getToken } = useAuth();
+  const { user } = useUser();
+
+  useEffect(() => {
+    async function createOrFetchUser() {
+      if (!user) return;
+
+      const token = await getToken({ template: "skillmentor-auth" });
+      if (!token) return;
+
+      const userPayload = {
+        first_name: user.firstName,
+        last_name: user.lastName,
+        email: user.primaryEmailAddress?.emailAddress,
+        phone_number: "+1234567890",
+        address: "123 Main St, Springfield, USA",
+        age: 20,
+      };
+
+      // const res = await fetch("https://backend.com/api/user", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      //   body: JSON.stringify(userPayload),
+      // });
+      console.log("User payload:", userPayload);
+      console.log("JWT Token:", token);
+    }
+
+    createOrFetchUser();
+  }, [getToken, user]);
 
   const updateCourses = useCallback(() => {
     const currentCourses = storage.getEnrolledCourses();
     setCourses(currentCourses);
   }, []);
 
-  // Check authentication and redirect if not authenticated
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/login");
-      return;
+    if (isLoaded && isSignedIn) {
+      updateCourses();
+      const interval = setInterval(updateCourses, 1000);
+      return () => clearInterval(interval);
     }
-    updateCourses();
-    const interval = setInterval(updateCourses, 1000);
-    return () => clearInterval(interval);
-  }, [isAuthenticated, navigate, updateCourses]);
+  }, [isLoaded, isSignedIn, updateCourses]);
+
+  if (!isLoaded) {
+    return (
+      <div className="container py-10">
+        <div className="flex items-center justify-center">
+          <div className="text-lg">Loading...</div>
+        </div>
+      </div>
+    );
+  }
+  if (!isSignedIn) {
+    router("/login");
+  }
 
   if (!courses.length) {
     return (

@@ -1,7 +1,7 @@
 import { Navigation } from "./Navigation";
 import { Footer } from "./Footer";
-import { ReactNode } from "react";
 import { ToastProvider, ToastViewport } from "./ui/toast";
+import type { ReactNode } from "react";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
